@@ -63,8 +63,9 @@ function navigateTo(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   document.getElementById(`page-${page}`).classList.add('active');
-  document.querySelector(`[data-page="${page}"]`).classList.add('active');
+  document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  syncBottomNav(page);
 }
 
 // ===== FLOATING PARTICLES =====
@@ -523,6 +524,66 @@ window.restartQuiz = function() {
   score = 0;
   renderQuiz();
 };
+
+// ===== SERVICE WORKER REGISTRATION =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+// ===== PWA INSTALL BANNER =====
+let deferredPrompt = null;
+const pwaBanner = document.getElementById('pwa-banner');
+const pwaInstallBtn = document.getElementById('pwa-install-btn');
+const pwaBannerClose = document.getElementById('pwa-banner-close');
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after 3 seconds
+  setTimeout(() => {
+    if (!localStorage.getItem('pwa-dismissed')) {
+      pwaBanner.classList.add('show');
+    }
+  }, 3000);
+});
+
+pwaInstallBtn?.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  pwaBanner.classList.remove('show');
+  if (outcome === 'accepted') localStorage.setItem('pwa-dismissed', '1');
+});
+
+pwaBannerClose?.addEventListener('click', () => {
+  pwaBanner.classList.remove('show');
+  localStorage.setItem('pwa-dismissed', '1');
+});
+
+// ===== PWA URL PARAM ROUTING (shortcut support) =====
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('page')) navigateTo(urlParams.get('page'));
+
+// ===== BOTTOM NAV =====
+document.querySelectorAll('.bottom-nav-item').forEach(item => {
+  item.addEventListener('click', e => {
+    e.preventDefault();
+    const page = item.dataset.page;
+    navigateTo(page);
+    document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// Sync bottom nav with page nav
+function syncBottomNav(page) {
+  document.querySelectorAll('.bottom-nav-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.page === page);
+  });
+}
 
 // ===== INIT =====
 loadHomeWeather();
