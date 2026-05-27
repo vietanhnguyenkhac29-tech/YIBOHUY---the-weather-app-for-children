@@ -1006,8 +1006,106 @@ main { min-height: 90vh; }
   font-weight: 600;
 }
 
+/* ===== PWA INSTALL BANNER ===== */
+.pwa-banner {
+  position: fixed;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  background: linear-gradient(135deg, #1971C2, #4DABF7);
+  color: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  box-shadow: 0 -8px 32px rgba(25,113,194,0.35);
+  width: min(480px, 96vw);
+  transition: bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pwa-banner.show { bottom: 0; }
+.pwa-banner-icon { font-size: 2rem; flex-shrink: 0; }
+.pwa-banner-text { flex: 1; display: flex; flex-direction: column; }
+.pwa-banner-text strong { font-family: 'Baloo 2', cursive; font-size: 0.95rem; }
+.pwa-banner-text span { font-size: 0.78rem; opacity: 0.85; }
+.pwa-install-btn {
+  background: #fff;
+  color: #1971C2;
+  border: none;
+  border-radius: 50px;
+  padding: 0.5rem 1.2rem;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.pwa-install-btn:hover { transform: scale(1.05); }
+.pwa-banner-close {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  color: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ===== BOTTOM NAV (mobile PWA) ===== */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 150;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 2px solid rgba(255,217,61,0.4);
+  padding: 0.5rem 0;
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--text-soft);
+  padding: 0.3rem 0.5rem;
+  border-radius: 12px;
+  transition: all 0.2s;
+  min-height: 52px;
+  justify-content: center;
+}
+.bottom-nav-item.active {
+  color: var(--sky-deep);
+}
+.bottom-nav-item.active .bottom-nav-icon {
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 6px rgba(25,113,194,0.3));
+}
+.bottom-nav-icon { font-size: 1.5rem; transition: transform 0.2s; line-height: 1; }
+.bottom-nav-label { font-family: 'Baloo 2', cursive; font-size: 0.65rem; font-weight: 700; }
+
 /* ===== RESPONSIVE ===== */
+
+/* Tablet landscape & small desktop */
+@media (max-width: 900px) {
+  .facts-grid { grid-template-columns: repeat(2, 1fr); }
+  .learn-cards-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Tablet portrait */
 @media (max-width: 768px) {
+  /* Show bottom nav, hide top nav links */
+  .bottom-nav { display: flex; }
   .nav-links {
     display: none;
     position: absolute;
@@ -1022,15 +1120,23 @@ main { min-height: 90vh; }
   }
   .nav-links.open { display: flex; }
   .nav-hamburger { display: flex; }
-  .navbar { position: relative; }
+  .navbar { position: sticky; }
 
+  /* Add padding so content doesn't hide behind bottom nav */
+  main { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  .footer { margin-bottom: calc(72px + env(safe-area-inset-bottom)); }
+
+  /* Hero */
   .hero {
     flex-direction: column;
     text-align: center;
-    padding: 2rem 1.5rem;
+    padding: 2rem 1.5rem 2.5rem;
     border-radius: 0 0 40px 40px;
+    min-height: unset;
+    gap: 1.5rem;
   }
-  .hero-mascot { margin-top: 1.5rem; }
+  .hero-content { max-width: 100%; }
+  .hero-mascot { margin-top: 0; }
   .mascot-sun { width: 120px; height: 120px; }
   .sun-face { width: 78px; height: 78px; }
   .ray { width: 10px; height: 10px; }
@@ -1043,15 +1149,174 @@ main { min-height: 90vh; }
   .ray:nth-child(7) { transform: rotate(270deg) translateX(52px); }
   .ray:nth-child(8) { transform: rotate(315deg) translateX(52px); }
 
+  /* Sections */
+  .section-container { padding: 0 1rem; margin: 1.8rem auto; }
+  .section-title { font-size: 1.35rem; }
+
+  /* Cards */
+  .learn-cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .facts-grid { grid-template-columns: repeat(2, 1fr); }
+  .details-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Forecast */
+  .forecast-row { gap: 0.6rem; }
+  .forecast-card { min-width: 100px; padding: 0.9rem 0.6rem; }
+
+  /* Quiz */
   .quiz-options { grid-template-columns: 1fr; }
+  .quiz-question { font-size: 1.2rem; }
+
+  /* Water cycle */
   .cycle-steps { gap: 0.3rem; }
   .step-icon { width: 55px; height: 55px; font-size: 2.2rem; }
   .step-arrow { font-size: 1.2rem; margin-top: 16px; }
+
+  /* Search */
+  .search-bar-wrap { flex-direction: row; }
+  .city-input { font-size: 0.95rem; }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
+  /* Navbar */
+  .navbar { padding: 0.7rem 1rem; }
+  .logo-text { font-size: 1.4rem; }
+  .logo-sun { font-size: 1.6rem; }
+
+  /* Hero */
+  .hero { padding: 1.5rem 1rem 2rem; gap: 1.2rem; }
+  .hero-title { font-size: clamp(1.8rem, 8vw, 2.2rem); }
+  .hero-sub { font-size: 1rem; }
+  .btn-hero { font-size: 1rem; padding: 0.7rem 1.6rem; }
+  .mascot-sun { width: 100px; height: 100px; }
+  .sun-face { width: 65px; height: 65px; }
+  .sun-mouth { font-size: 1.1rem; }
+  .ray:nth-child(1) { transform: rotate(0deg) translateX(44px); }
+  .ray:nth-child(2) { transform: rotate(45deg) translateX(44px); }
+  .ray:nth-child(3) { transform: rotate(90deg) translateX(44px); }
+  .ray:nth-child(4) { transform: rotate(135deg) translateX(44px); }
+  .ray:nth-child(5) { transform: rotate(180deg) translateX(44px); }
+  .ray:nth-child(6) { transform: rotate(225deg) translateX(44px); }
+  .ray:nth-child(7) { transform: rotate(270deg) translateX(44px); }
+  .ray:nth-child(8) { transform: rotate(315deg) translateX(44px); }
+
+  /* Weather card */
+  .current-weather-card { padding: 1.2rem; }
   .weather-main { flex-direction: column; text-align: center; gap: 1rem; }
-  .weather-mini-stats { justify-content: center; }
-  .section-title { font-size: 1.3rem; }
-  .result-main { flex-direction: column; text-align: center; }
+  .weather-icon-big { font-size: 4rem; }
+  .weather-temp { font-size: 2.8rem; }
+  .city-name { font-size: 1.4rem; }
+  .weather-mini-stats { justify-content: center; gap: 0.6rem; }
+  .mini-stat { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
+
+  /* Forecast */
+  .forecast-row { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .forecast-card { min-width: 100px; scroll-snap-align: start; flex-shrink: 0; }
+
+  /* Facts grid */
+  .facts-grid { grid-template-columns: 1fr; }
+  .fact-card { padding: 1.1rem 1rem; }
+
+  /* Learn */
+  .learn-hero { padding: 2rem 1.2rem; border-radius: 0 0 30px 30px; }
+  .learn-cards-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+  .learn-card { padding: 1rem; }
+  .learn-card-icon { font-size: 2.8rem; }
+  .learn-card h3 { font-size: 0.95rem; }
+
+  /* Water cycle */
+  .water-cycle-card { padding: 1.2rem; }
+  .cycle-steps { flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+  .cycle-step { width: calc(50% - 0.5rem); }
+  .step-arrow { display: none; }
+
+  /* Quiz */
+  .quiz-box { padding: 1.2rem; }
+  .quiz-option { padding: 0.8rem 1rem; font-size: 0.95rem; }
+
+  /* Search page */
+  .search-hero { padding: 1.5rem 1rem 1.5rem; border-radius: 0 0 30px 30px; }
+  .search-bar-wrap { padding: 5px 5px 5px 1rem; }
+  .city-input { font-size: 0.9rem; }
+  .btn-search { padding: 0.6rem 1rem; font-size: 0.9rem; }
+  .quick-cities { gap: 0.4rem; }
+  .city-chip { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
+
+  /* Result card */
+  .result-card { padding: 1.2rem; }
+  .result-city { font-size: 1.6rem; }
+  .result-main { flex-direction: column; text-align: center; gap: 0.8rem; }
+  .result-temp { font-size: 3rem; }
+  .result-icon { font-size: 4rem; }
+  .result-quick-stats { justify-content: center; gap: 0.5rem; }
+  .result-stat { font-size: 0.82rem; padding: 0.4rem 0.8rem; }
+
+  /* Details */
+  .details-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+  .detail-card { padding: 0.9rem; }
+  .detail-icon { font-size: 1.6rem; }
+  .detail-value { font-size: 1.1rem; }
+
+  /* Modal */
+  .modal-box { padding: 1.5rem; width: 95%; max-height: 90vh; }
+  .modal-icon { font-size: 3.5rem; }
+  .modal-title { font-size: 1.5rem; }
+
+  /* Section */
+  .section-container { padding: 0 0.8rem; margin: 1.5rem auto; }
+  .section-title { font-size: 1.2rem; }
+}
+
+/* Very small phones (SE etc) */
+@media (max-width: 360px) {
+  .learn-cards-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .learn-card-icon { font-size: 2.2rem; }
+  .result-temp { font-size: 2.5rem; }
+  .forecast-card { min-width: 88px; }
+  .hero-title { font-size: 1.7rem; }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero { min-height: unset; padding: 1rem 2rem; flex-direction: row; gap: 1.5rem; }
+  .hero-mascot { order: -1; }
+  .mascot-sun { width: 80px; height: 80px; }
+  .sun-face { width: 52px; height: 52px; }
+  .ray:nth-child(n) { transform: rotate(calc(var(--n, 0) * 45deg)) translateX(36px); }
+  .bottom-nav { padding: 0.3rem 0; }
+  .bottom-nav-label { display: none; }
+  .bottom-nav-item { min-height: 40px; }
+}
+
+/* Safe area — iPhone notch / Dynamic Island */
+@supports (padding: max(0px)) {
+  .navbar {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  .bottom-nav {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Touch improvements — bigger tap targets */
+@media (hover: none) and (pointer: coarse) {
+  .nav-link { padding: 0.6rem 1.2rem; min-height: 44px; display: flex; align-items: center; }
+  .city-chip { min-height: 40px; display: inline-flex; align-items: center; }
+  .quiz-option { min-height: 52px; }
+  .btn-search { min-height: 44px; }
+  .btn-hero { min-height: 48px; }
+  .learn-card { -webkit-tap-highlight-color: transparent; }
+  .learn-card:hover { transform: none; }
+  .learn-card:active { transform: scale(0.97); }
+  .forecast-card:hover { transform: none; }
+  .detail-card:hover { transform: none; }
+}
+
+/* PWA standalone mode tweaks */
+@media (display-mode: standalone) {
+  .navbar { padding-top: max(0.8rem, env(safe-area-inset-top)); }
+  .pwa-banner { display: none !important; }
 }
