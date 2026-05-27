@@ -2,13 +2,40 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Yibohuy ☀️ Dự Báo Thời Tiết</title>
+
+  <!-- ===== PWA ===== -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#FFD93D" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Yibohuy" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="Yibohuy" />
+
+  <!-- ===== SEO / Social ===== -->
+  <meta name="description" content="Dự báo thời tiết vui nhộn dành cho các bạn nhỏ — miễn phí, chính xác!" />
+  <meta name="color-scheme" content="light" />
+
+  <!-- ===== Safe area for iPhone notch / Dynamic Island ===== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
 
+  <!-- PWA INSTALL BANNER -->
+  <div class="pwa-banner" id="pwa-banner">
+    <span class="pwa-banner-icon">📲</span>
+    <div class="pwa-banner-text">
+      <strong>Cài Yibohuy về máy!</strong>
+      <span>Dùng như app, xem offline</span>
+    </div>
+    <button class="pwa-install-btn" id="pwa-install-btn">Cài ngay</button>
+    <button class="pwa-banner-close" id="pwa-banner-close">✕</button>
+  </div>
+ 
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar">
     <div class="nav-logo">
@@ -264,6 +291,22 @@
 
   <!-- FLOATING PARTICLES -->
   <div class="particles" id="particles"></div>
+
+  <!-- BOTTOM NAV (mobile only) -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="#" class="bottom-nav-item active" data-page="home">
+      <span class="bottom-nav-icon">🏠</span>
+      <span class="bottom-nav-label">Trang Chủ</span>
+    </a>
+    <a href="#" class="bottom-nav-item" data-page="learn">
+      <span class="bottom-nav-icon">📚</span>
+      <span class="bottom-nav-label">Học Tập</span>
+    </a>
+    <a href="#" class="bottom-nav-item" data-page="search">
+      <span class="bottom-nav-icon">🔍</span>
+      <span class="bottom-nav-label">Tìm Kiếm</span>
+    </a>
+  </nav>
 
   <footer class="footer">
     <p>☀️ <strong>Yibohuy</strong> — Trang web thời tiết dành cho các bạn nhỏ 🌈</p>
